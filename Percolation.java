@@ -1,7 +1,9 @@
-public class Percolation{
-  private WeightedQuickUnionUF uf;
+public class Percolation
+{
   private int N;
-  private boolean[][] sites;
+  private WeightedQuickUnionUF openNodes;
+  private WeightedQuickUnionUF filledNodes;
+  private boolean[][] openSites;
   private boolean[][] filledSites;
   private int open = 0;
   private int virtualSource = 0;
@@ -10,74 +12,65 @@ public class Percolation{
   public Percolation(int N){
     this.N = N;
     virtualSink = N * N + 1;
-    sites = new boolean[N][N];
+    openSites = new boolean[N][N];
     filledSites = new boolean[N][N];
-    uf = new WeightedQuickUnionUF(N*N + 2);
-    for (int i = 0; i < N; i++){
-      uf.union(virtualSource, INDEX(0, i));
-    }
-    for (int i = 0; i < N; i++){
-      uf.union(virtualSink, INDEX(N-1, i));
-    }
+    openNodes = new WeightedQuickUnionUF(N*N + 2);
+    filledNodes = new WeightedQuickUnionUF(N*N + 1);
   }
 
   public void open(int row, int col) {
-    sites[row][col] = true;
-    if (!sites[row][col]){
-      try{
-        if (sites[row - 1][col]){
-          uf.union(INDEX(row - 1, col), INDEX(row, col));
-          open++;
-        }
+    if (!openSites[row][col]){
+      open++;
+      openSites[row][col] = true;
+      connect(row - 1, col, row, col);
+      connect(row, col - 1, row, col);
+      connect(row + 1, col, row, col);
+      connect(row, col + 1, row, col);
+      if (row == 0){
+        openNodes.union(virtualSource, INDEX(row, col));
       }
-      catch (IndexOutOfBoundsException E){}
-      try{
-        if (sites[row][col - 1]){
-          uf.union(INDEX(row, col - 1), INDEX(row, col));
-          open++;
-        }
+      if (row == N - 1){
+        openNodes.union(virtualSink, INDEX(row, col));
       }
-      catch (IndexOutOfBoundsException E){}
-      try {
-        if (sites[row + 1][col]) {
-          uf.union(INDEX(row + 1, col), INDEX(row, col));
-          open++;
-        }
-      }
-      catch (IndexOutOfBoundsException E){}
-      try {
-        if (sites[row][col + 1]) {
-          uf.union(INDEX(row, col + 1), INDEX(row, col));
-          open++;
-        }
-      }
-      catch (IndexOutOfBoundsException E){}
-      if (uf.connected(virtualSource, INDEX(row, col))){
+      if (openNodes.connected(virtualSource, INDEX(row, col))){
+        filledNodes.union(virtualSource, INDEX(row, col));
         filledSites[row][col] = true;
       }
     }
   }
   public boolean isOpen(int row, int col){
-      return (sites[row][col]);
-    }
+    return (openSites[row][col]);
+  }
 
   public boolean isFull(int row, int col){
-      if (uf.connected(virtualSource, INDEX(row, col))){
-        filledSites[row][col] = true;
-        return true;
-      }
-      return false;
+    if (openNodes.connected(virtualSource, INDEX(row, col))){
+      filledNodes.union(virtualSource, INDEX(row, col));
+      filledSites[row][col] = true;
     }
-  public int numberOfOpenSites(){
-      return(open);
-    }
-  public boolean percolates(){
-      return (uf.connected(virtualSource, virtualSink));
-    }
+    return filledNodes.connected(virtualSource, INDEX(row, col));
+  }
 
-    private int INDEX(int row, int col){
-      return (N*row + col + 1);
+  public int numberOfOpenSites(){
+    return(open);
+  }
+
+  public boolean percolates(){
+    return (openNodes.connected(virtualSource, virtualSink));
+  }
+
+  private int INDEX(int row, int col){
+    return (N*row + col + 1);
+  }
+
+  private void connect(int nrow, int ncol, int row, int col){
+    try {
+      if (openSites[nrow][ncol]) {
+        openNodes.union(INDEX(nrow, ncol), INDEX(row, col));
+      }
     }
+    catch (IndexOutOfBoundsException E){}
+  }
+
   public static void main(String[] args) throws Exception{
     Percolation p = new Percolation(7);
     while(!p.percolates()){
@@ -117,6 +110,7 @@ public class Percolation{
       }
       System.out.println();
     }
+    System.out.println(p.numberOfOpenSites());
 
   }
 
