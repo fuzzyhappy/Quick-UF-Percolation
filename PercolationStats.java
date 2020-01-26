@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 
-public class PercolationStats {
+public class PercolationStats
+{
+   private final double confidenceCoeff = 1.96;
    private double mean;
    private double stdDev;
    private double confidenceLow;
@@ -27,8 +29,8 @@ public class PercolationStats {
       accum /= T - 1;
       stdDev = Math.sqrt(accum);
 
-      confidenceHigh = mean + 1.96 * stdDev / Math.sqrt(T);
-      confidenceLow = mean - 1.96 * stdDev / Math.sqrt(T);
+      confidenceHigh = mean + confidenceCoeff * stdDev / Math.sqrt(T);
+      confidenceLow = mean - confidenceCoeff * stdDev / Math.sqrt(T);
 
    }
 
@@ -49,7 +51,7 @@ public class PercolationStats {
    }
 
    public static void main(String[] args){
-       PercolationStats percStat = new PercolationStats(200, 1000);
+       PercolationStats percStat = new PercolationStats(200, 10000);
        System.out.println("Mean: " + percStat.mean());
        System.out.println("Standard Deviation: " + percStat.stddev());
        System.out.println("Confidence Interval: " +

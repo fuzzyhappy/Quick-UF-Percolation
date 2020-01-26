@@ -1,10 +1,10 @@
+
 public class Percolation
 {
   private int N;
   private WeightedQuickUnionUF openNodes;
   private WeightedQuickUnionUF filledNodes;
   private boolean[][] openSites;
-  private boolean[][] filledSites;
   private int open = 0;
   private int virtualSource = 0;
   private int virtualSink;
@@ -13,7 +13,6 @@ public class Percolation
     this.N = N;
     virtualSink = N * N + 1;
     openSites = new boolean[N][N];
-    filledSites = new boolean[N][N];
     openNodes = new WeightedQuickUnionUF(N*N + 2);
     filledNodes = new WeightedQuickUnionUF(N*N + 1);
   }
@@ -28,13 +27,10 @@ public class Percolation
       connect(row, col + 1, row, col);
       if (row == 0){
         openNodes.union(virtualSource, INDEX(row, col));
+        filledNodes.union(virtualSource, INDEX(row, col));
       }
       if (row == N - 1){
         openNodes.union(virtualSink, INDEX(row, col));
-      }
-      if (openNodes.connected(virtualSource, INDEX(row, col))){
-        filledNodes.union(virtualSource, INDEX(row, col));
-        filledSites[row][col] = true;
       }
     }
   }
@@ -43,10 +39,6 @@ public class Percolation
   }
 
   public boolean isFull(int row, int col){
-    if (openNodes.connected(virtualSource, INDEX(row, col))){
-      filledNodes.union(virtualSource, INDEX(row, col));
-      filledSites[row][col] = true;
-    }
     return filledNodes.connected(virtualSource, INDEX(row, col));
   }
 
@@ -66,6 +58,7 @@ public class Percolation
     try {
       if (openSites[nrow][ncol]) {
         openNodes.union(INDEX(nrow, ncol), INDEX(row, col));
+        filledNodes.union(INDEX(nrow, ncol), INDEX(row, col));
       }
     }
     catch (IndexOutOfBoundsException E){}
@@ -90,23 +83,6 @@ public class Percolation
           }
         }
         System.out.println();
-      }
-      System.out.println();
-      Thread.sleep(50);
-    }
-    for (int i = 0; i < 7; i++){
-      for (int j = 0; j < 7; j++){
-        if (p.isOpen(i, j)){
-          if (p.isFull(i, j)){
-            System.out.print("_");
-          }
-          else {
-            System.out.print(" ");
-          }
-        }
-        else {
-          System.out.print("X");
-        }
       }
       System.out.println();
     }
