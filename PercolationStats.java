@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 public class PercolationStats
 {
    private final double confidenceCoeff = 1.96;

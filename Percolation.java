@@ -65,11 +65,11 @@ public class Percolation
   }
 
   public static void main(String[] args) throws Exception{
-    Percolation p = new Percolation(7);
+    Percolation p = new Percolation(14);
     while(!p.percolates()){
-      p.open((int)(Math.random()*7), (int)(Math.random()*7));
-      for (int i = 0; i < 7; i++){
-        for (int j = 0; j < 7; j++){
+      p.open((int)(Math.random()*14), (int)(Math.random()*14));
+      for (int i = 0; i < 14; i++){
+        for (int j = 0; j < 14; j++){
           if (p.isOpen(i, j)){
             if (p.isFull(i, j)){
               System.out.print("_");
