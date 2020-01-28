@@ -1,3 +1,9 @@
+/**
+  * Estimates the true average proportion of open sites needed before a grid percolates.
+  * Also computes a 95% confidence interval around that estimate.
+  *
+  * @EWang @1.8 @28.1.2020
+  */
 public class PercolationStats
 {
    private final double confidenceCoeff = 1.96;
@@ -7,6 +13,7 @@ public class PercolationStats
    private double confidenceHigh;
 
    public PercolationStats(int N, int T){
+      // accumulator variable
       double accum = 0;
       double[] statistics = new double[T];
 
@@ -15,18 +22,21 @@ public class PercolationStats
          while (!sim.percolates()){
             sim.open((int)(Math.random()*N), (int)(Math.random()*N));
          }
+         // finds the statistic of proportion of open sites for a percolating grid
          statistics[t] = (double) sim.numberOfOpenSites() / (N*N);
          accum += statistics[t];
       }
       mean = accum / T;
 
       accum = 0;
+      // finds std deviation
       for (double stat : statistics){
          accum += (stat - mean) * (stat - mean);
       }
       accum /= T - 1;
       stdDev = Math.sqrt(accum);
 
+      // finds bounds of 95% confidence interval
       confidenceHigh = mean + confidenceCoeff * stdDev / Math.sqrt(T);
       confidenceLow = mean - confidenceCoeff * stdDev / Math.sqrt(T);
 
