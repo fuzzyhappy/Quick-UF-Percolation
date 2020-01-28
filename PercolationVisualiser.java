@@ -13,26 +13,43 @@ public class PercolationVisualiser
 
         StdDraw.setXscale(0, N);
         StdDraw.setYscale(0, N);
-        StdDraw.setPenColor(0, 0, 0);
-        StdDraw.filledSquare(N/2, N/2, N/2);
+        StdDraw.clear(StdDraw.BLACK);
 
         while (fileReader.hasNextLine()){
             int x = Integer.parseInt(fileReader.next());
             int y = Integer.parseInt(fileReader.next());
             sim.open(x, y);
-            StdDraw.setPenColor(255, 255, 255);
-            StdDraw.filledSquare(CANVASCOORD(y + 0.5), CANVASCOORD(x + 0.5), 0.45);
+
             for (int i = 0; i < N; i++){
                 for (int j = 0; j < N; j++){
-                    if (sim.isFull(i, j)){
-                        //System.out.println(i + " " + j);
-                        StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
-                        StdDraw.filledSquare(x + 0.5, CANVASCOORD(y + 0.5), 0.45);
+                    StdDraw.setPenColor(255, 255, 255);
+                    if (sim.isOpen(i, j)){
+                        if (sim.isFull(i, j)){
+                            StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+                        }/**
+                        else {
+                            StdDraw.setPenColor(255, 255, 255);
+                            drawSite(x, y);
+                        }**/
+                        drawSite(x, y);
                     }
                 }
             }
-            for (int i = 0; i < 14; i++){
-                for (int j = 0; j < 14; j++){
+            /**
+            for (int i = 0; i < N; i++){
+                for (int j = 0; j < N; j++){
+                    if (sim.isFull(i, j)){
+                        StdDraw.setPenColor(StdDraw.BOOK_LIGHT_BLUE);
+                        drawSite(x, y);
+                    }
+                    else if (sim.isOpen(i, j)){
+                        StdDraw.setPenColor(255, 255, 255);
+                        drawSite(x, y);
+                    }
+                }
+            }**/
+            for (int i = 0; i < N; i++){
+                for (int j = 0; j < N; j++){
                     if (sim.isOpen(i, j)){
                         if (sim.isFull(i, j)){
                             System.out.print("_");
@@ -54,7 +71,7 @@ public class PercolationVisualiser
         return N - i;
     }
 
-    private static double drawSite(double i){
-        return N - i;
+    private static void drawSite(double x, double y){
+        StdDraw.filledSquare(y + 0.5, N - x - 0.5, 0.45);
     }
 }
