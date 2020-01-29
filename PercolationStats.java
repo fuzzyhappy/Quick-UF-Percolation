@@ -1,9 +1,14 @@
 /**
-  * Estimates the true average proportion of open sites needed before a grid percolates.
-  * Also computes a 95% confidence interval around that estimate.
-  *
-  * @EWang @1.8 @28.1.2020
-  */
+ * java PercolationStats
+ * Mean: 0.5924103999999998
+ * Standard Deviation: 0.00974898473141137
+ * Confidence Interval: 0.5918061516661407 - 0.5930146483338589
+ *
+ * Estimates the true average proportion of open sites needed before a grid percolates.
+ * Also computes a 95% confidence interval around that estimate.
+ *
+ * @EWang @1.8 @28.1.2020
+ */
 public class PercolationStats
 {
    private final double confidenceCoeff = 1.96;
@@ -59,7 +64,7 @@ public class PercolationStats
    }
 
    public static void main(String[] args){
-       PercolationStats percStat = new PercolationStats(200, 10000);
+       PercolationStats percStat = new PercolationStats(200, 1000);
        System.out.println("Mean: " + percStat.mean());
        System.out.println("Standard Deviation: " + percStat.stddev());
        System.out.println("Confidence Interval: " +
