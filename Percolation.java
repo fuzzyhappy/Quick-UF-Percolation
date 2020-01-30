@@ -14,6 +14,7 @@
  *  the sink and the bottom row, respectively, or a 2/N chance overall to make an extra connection
  *  (Connection/union is logN cost, as is find()).
  * Lastly, it checks if the sink and source are connected to continue the loop, which is logN cost.
+ * Ergo, the complexity is generally N^2 log N with N overhead.
  *
  * @EWang @1.8 @28.1.2020
  */
