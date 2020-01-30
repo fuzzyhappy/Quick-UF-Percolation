@@ -1,5 +1,5 @@
 /**
- * java PercolationStats
+ * % java PercolationStats
  * Mean: 0.5924103999999998
  * Standard Deviation: 0.00974898473141137
  * Confidence Interval: 0.5918061516661407 - 0.5930146483338589
