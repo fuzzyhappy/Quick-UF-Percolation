@@ -1,0 +1,1 @@
+This project uses a quick union data structure to efficiently calculate statistics about the percolation of a square grid. The runtime of a single simulated instance of percolation is estimated to be O(n^2 log n).
